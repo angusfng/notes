@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { createNote } from "@/app/actions";
+import { createNoteAction } from "@/app/actions";
 import { useEffect, useRef } from "react";
 import { Button } from "./ui/button";
 
@@ -22,31 +22,31 @@ const SubmitButton = () => {
 
 const NoteForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction] = useFormState(createNote, initialState);
+  const [formState, formAction] = useFormState(createNoteAction, initialState);
 
   useEffect(() => {
     formRef.current?.reset();
-  }, [state]);
+  }, [formState]);
 
   return (
-    <form ref={formRef} action={formAction}>
+    <form className="flex flex-col gap-4" ref={formRef} action={formAction}>
       <label htmlFor="title">Title</label>
       <input
         type="text"
         id="title"
         name="title"
-        defaultValue={state.fieldValues.title}
+        defaultValue={formState.fieldValues.title}
         placeholder="Title"
       />
       <label htmlFor="description">Description</label>
       <textarea
         id="description"
         name="description"
-        defaultValue={state.fieldValues.description}
+        defaultValue={formState.fieldValues.description}
         placeholder="Description"
       />
       <p aria-live="polite" className="sr-only">
-        {state.message}
+        {formState.message}
       </p>
       <SubmitButton />
     </form>

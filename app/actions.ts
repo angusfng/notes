@@ -1,18 +1,14 @@
 "use server";
 
-import { supabase } from "@/supabase/server";
+import { insertNote, deleteNote, getNotes, getNote } from "@/data-access/notes";
 import { revalidatePath } from "next/cache";
 
-export async function createNote(prevState: any, formData: FormData) {
-  const title = formData.get("title");
-  const description = formData.get("description");
+export async function createNoteAction(prevState: any, formData: FormData) {
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
 
   try {
-    const { error } = await supabase.from("notes").insert({
-      title: title,
-      description: description,
-    });
-
+    const { error } = await insertNote(title, description);
     if (error) {
       throw error;
     }
@@ -38,14 +34,15 @@ export async function createNote(prevState: any, formData: FormData) {
   }
 }
 
-export async function deleteNote(id: number) {
-  try {
-    const { error } = await supabase.from("notes").delete().eq("id", id);
-    if (error) {
-      throw error;
-    }
-    revalidatePath("/");
-  } catch (e) {
-    console.error(e);
-  }
+export async function deleteNoteAction(id: number) {
+  await deleteNote(id);
+  revalidatePath("/");
+}
+
+export async function getNotesAction() {
+  return await getNotes();
+}
+
+export async function getNoteAction(id: number) {
+  return await getNote(id);
 }

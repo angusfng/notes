@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteNote } from "@/app/actions";
+import { deleteNoteAction } from "@/app/actions";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -18,25 +18,26 @@ interface NoteCardProps {
 }
 const NoteCard = ({ id, title, description }: NoteCardProps) => {
   return (
-    <Link href={`/note/${id}`}>
-      <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{description}</p>
-        </CardContent>
-        <CardFooter>
-          <Button
-            onClick={async () => {
-              await deleteNote(id);
-            }}
-          >
-            Delete
-          </Button>
-        </CardFooter>
-      </Card>
-    </Link>
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>{description}</p>
+      </CardContent>
+      <CardFooter>
+        <Button
+          onClick={async () => {
+            await deleteNoteAction(id);
+          }}
+        >
+          Delete
+        </Button>
+        <Link href={`/note/${id}`}>
+          <Button>View</Button>
+        </Link>
+      </CardFooter>
+    </Card>
   );
 };
 
