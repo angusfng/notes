@@ -3,7 +3,7 @@ import NoteForm from "@/components/note-form";
 import { getNotesAction } from "./actions";
 
 export default async function Page() {
-  const { data: notes } = await getNotesAction();
+  const notes = await getNotesAction();
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-100">

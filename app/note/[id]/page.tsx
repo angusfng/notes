@@ -1,12 +1,34 @@
 import { getNoteAction } from "@/app/actions";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
-const NotePage = async () => {
-  const { data: note } = await getNoteAction(1);
+const NotePage = async ({ params }: { params: { id: number } }) => {
+  const note = await getNoteAction(params.id);
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-100">
-      <h2>{note[0].title}</h2>
-      <p>{note[0].description}</p>
+    <div>
+      <div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">Open</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <Link href={`/note/edit/${params.id}`}>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+            </Link>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <div>
+        <h2>{note?.title}</h2>
+        <p>{note?.description}</p>
+      </div>
     </div>
   );
 };

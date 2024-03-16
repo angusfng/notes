@@ -26,6 +26,9 @@ const NoteCard = ({ id, title, description }: NoteCardProps) => {
         <p>{description}</p>
       </CardContent>
       <CardFooter>
+        <Link href={`/note/${id}`}>
+          <Button>View</Button>
+        </Link>
         <Button
           onClick={async () => {
             await deleteNoteAction(id);
@@ -33,9 +36,6 @@ const NoteCard = ({ id, title, description }: NoteCardProps) => {
         >
           Delete
         </Button>
-        <Link href={`/note/${id}`}>
-          <Button>View</Button>
-        </Link>
       </CardFooter>
     </Card>
   );
