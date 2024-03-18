@@ -2,8 +2,16 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import { createNoteAction } from "@/app/actions";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { redirect } from "next/navigation";
 
 const initialState = {
   message: "",
@@ -23,33 +31,56 @@ const SubmitButton = () => {
 const NoteForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [formState, formAction] = useFormState(createNoteAction, initialState);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    formRef.current?.reset();
+    if (formState.message === "success") {
+      formRef.current?.reset();
+      setOpen(false);
+      redirect("/");
+    }
   }, [formState]);
 
   return (
-    <form className="flex flex-col gap-4" ref={formRef} action={formAction}>
-      <label htmlFor="title">Title</label>
-      <input
-        type="text"
-        id="title"
-        name="title"
-        defaultValue={formState.fieldValues.title}
-        placeholder="Title"
-      />
-      <label htmlFor="description">Description</label>
-      <textarea
-        id="description"
-        name="description"
-        defaultValue={formState.fieldValues.description}
-        placeholder="Description"
-      />
-      <p aria-live="polite" className="sr-only">
-        {formState.message}
-      </p>
-      <SubmitButton />
-    </form>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Create note</Button>
+      </DialogTrigger>
+      <DialogContent className="">
+        <DialogHeader>
+          <DialogTitle>Create note</DialogTitle>
+        </DialogHeader>
+        <div>
+          <form
+            className="flex flex-col gap-4"
+            ref={formRef}
+            action={formAction}
+          >
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              defaultValue={formState.fieldValues.title}
+              placeholder="Title"
+              className="h-10 p-2"
+            />
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              defaultValue={formState.fieldValues.description}
+              placeholder="Description"
+              className="h-32 p-2"
+            />
+            <p aria-live="polite" className="sr-only">
+              {formState?.message}
+            </p>
+            <SubmitButton />
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

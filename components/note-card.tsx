@@ -23,12 +23,12 @@ const NoteCard = ({ id, title, description }: NoteCardProps) => {
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p>{description}</p>
+        <p className="truncate">{description}</p>
       </CardContent>
-      <CardFooter>
-        <Link href={`/note/${id}`}>
-          <Button>View</Button>
-        </Link>
+      <CardFooter className="flex gap-2">
+        <Button asChild>
+          <Link href={`/note/${id}`}> View</Link>
+        </Button>
         <Button
           onClick={async () => {
             await deleteNoteAction(id);
