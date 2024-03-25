@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 
 const initialState = {
   message: "",
-  errors: undefined,
+  error: null,
   fieldValues: {
     title: "",
     description: "",

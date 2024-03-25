@@ -13,10 +13,13 @@ const NotePage = async ({ params }: { params: { id: number } }) => {
 
   return (
     <div>
-      <div>
+      <div className="flex justify-between">
+        <Button asChild>
+          <Link href="/">Back to dashboard</Link>
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">Open</Button>
+            <Button variant="outline">Options</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <Link href={`/note/edit/${params.id}`}>
@@ -25,8 +28,8 @@ const NotePage = async ({ params }: { params: { id: number } }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div>
-        <h2>{note?.title}</h2>
+      <div className="flex flex-col mt-8 gap-8">
+        <h1 className="text-4xl">{note?.title}</h1>
         <p>{note?.description}</p>
       </div>
     </div>

@@ -10,36 +10,33 @@ import {
 import { revalidatePath } from "next/cache";
 import { Note } from "./types";
 import { redirect } from "next/navigation";
+import { createClient } from "@/supabase/server";
 
 export async function createNoteAction(prevState: any, formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
 
-  try {
-    const { error } = await insertNote(title, description);
-    if (error) {
-      throw error;
-    }
-
-    revalidatePath("/");
-    return {
-      message: "success",
-      errors: undefined,
-      fieldValues: {
-        title: "",
-        description: "",
-      },
-    };
-  } catch (e) {
+  const { error } = await insertNote(title, description);
+  if (error) {
     return {
       message: "error",
-      errors: undefined,
+      error: error,
       fieldValues: {
         title: prevState.fieldValues.title,
         description: prevState.fieldValues.description,
       },
     };
   }
+
+  revalidatePath("/");
+  return {
+    message: "success",
+    error: null,
+    fieldValues: {
+      title: "",
+      description: "",
+    },
+  };
 }
 
 export async function editNoteAction(prevState: any, formData: FormData) {
@@ -55,7 +52,7 @@ export async function editNoteAction(prevState: any, formData: FormData) {
   } catch (e) {
     return {
       message: "error",
-      errors: undefined,
+      errors: null,
       fieldValues: {
         title: prevState.fieldValues.title,
         description: prevState.fieldValues.description,
@@ -98,4 +95,27 @@ export async function getNoteAction(id: number): Promise<Note> {
   }
 
   return note[0];
+}
+
+export async function loginAction(prevState: any, formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const data = {
+    email,
+    password,
+  };
+  const supabase = createClient();
+  const { error } = await supabase.auth.signInWithPassword(data);
+  if (error) {
+    return {
+      message: "error",
+      error,
+      fieldValues: {
+        email: prevState.fieldValues.email,
+        password: prevState.fieldValues.password,
+      },
+    };
+  }
+
+  redirect("/");
 }

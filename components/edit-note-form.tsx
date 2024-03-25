@@ -19,7 +19,7 @@ const SaveButton = () => {
 const EditNoteForm = ({ id, title, description }: EditNoteFormProps) => {
   const initialState = {
     message: "",
-    errors: undefined,
+    errors: null,
     fieldValues: {
       title: title,
       description: description,
@@ -30,21 +30,28 @@ const EditNoteForm = ({ id, title, description }: EditNoteFormProps) => {
 
   return (
     <div>
-      <form action={formAction}>
-        <label htmlFor="title">Title</label>
+      <h1 className="text-4xl">Edit Form</h1>
+      <form className="flex flex-col gap-8 mt-4" action={formAction}>
+        <label className="text-2xl" htmlFor="title">
+          Title
+        </label>
         <input
           type="text"
           id="title"
           name="title"
           placeholder="Title"
           defaultValue={formState.fieldValues.title}
+          className="h-10 p-2"
         />
-        <label htmlFor="description">Description</label>
+        <label className="text-2xl" htmlFor="description">
+          Description
+        </label>
         <textarea
           id="description"
           name="description"
           placeholder="Description"
           defaultValue={formState.fieldValues.description}
+          className="h-64 p-2"
         />
         <input type="hidden" name="id" value={id} />
         <SaveButton />
