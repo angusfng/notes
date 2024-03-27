@@ -109,7 +109,6 @@ export async function loginAction(prevState: any, formData: FormData) {
   if (error) {
     return {
       message: "error",
-      error,
       fieldValues: {
         email: prevState.fieldValues.email,
         password: prevState.fieldValues.password,
